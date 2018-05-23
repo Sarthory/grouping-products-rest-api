@@ -13,7 +13,7 @@ public class ProductList {
     public ProductList() {
     }
 
-    private ProductList(String description, List<Product> items) {
+    public ProductList(String description, List<Product> items) {
         this.description = description;
         this.items = items;
     }
