@@ -73,8 +73,8 @@ public class GroupingProductsController {
         return new ProductListData(groupedProductsList);
     }
 
-    // GET filer_by
-    @GetMapping("/filter_by={term}:{value}")
+    // GET filter
+    @GetMapping("/filter={term}:{value}")
     public ProductData filterProducts(@PathVariable String term, @PathVariable String value) {
 
         switch (term) {
