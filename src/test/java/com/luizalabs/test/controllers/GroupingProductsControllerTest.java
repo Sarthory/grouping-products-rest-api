@@ -25,11 +25,12 @@ public class GroupingProductsControllerTest {
 
     /**
      * Test of getGroupedProductsList method, of class GroupingProductsController.
+     *
      * @throws java.lang.Exception
      */
     @Test
     public void getGroupedProductsList() throws Exception {
-        mockMvc.perform(get("/products/group_by=brand:nikana")
+        mockMvc.perform(get("/products/group_by=brand")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'data':[]}"));
@@ -37,6 +38,7 @@ public class GroupingProductsControllerTest {
 
     /**
      * Test of filterProducts method, of class GroupingProductsController.
+     *
      * @throws java.lang.Exception
      */
     @Test

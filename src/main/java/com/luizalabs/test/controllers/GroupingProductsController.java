@@ -46,8 +46,10 @@ public class GroupingProductsController {
     // GET default grouped by EAN (according to priority order)
     @GetMapping
     public ProductListData getAll() {
+
         groupedProductsList.clear();
         groupedProductsList.addAll(ProductList.eanGrouping(rawProductsList));
+
         return new ProductListData(groupedProductsList);
     }
 
@@ -55,69 +57,85 @@ public class GroupingProductsController {
     @GetMapping("/group_by={term}")
     public ProductListData getGroupedProductsList(@PathVariable String term) {
 
-        switch (term) {
-            case "ean":
-                groupedProductsList.clear();
-                groupedProductsList.addAll(ProductList.eanGrouping(rawProductsList));
-                break;
-            case "title":
-                groupedProductsList.clear();
-                groupedProductsList.addAll(ProductList.titleGrouping(rawProductsList));
-                break;
-            case "brand":
-                groupedProductsList.clear();
-                groupedProductsList.addAll(ProductList.brandGrouping(rawProductsList));
-                break;
-        }
+        if (term.equals("ean") || term.equals("title") || term.equals("brand")) {
 
-        return new ProductListData(groupedProductsList);
+            switch (term) {
+                case "ean":
+                    groupedProductsList.clear();
+                    groupedProductsList.addAll(ProductList.eanGrouping(rawProductsList));
+                    break;
+                case "title":
+                    groupedProductsList.clear();
+                    groupedProductsList.addAll(ProductList.titleGrouping(rawProductsList));
+                    break;
+                case "brand":
+                    groupedProductsList.clear();
+                    groupedProductsList.addAll(ProductList.brandGrouping(rawProductsList));
+                    break;
+            }
+
+            return new ProductListData(groupedProductsList);
+
+        } else {
+
+            throw new IllegalArgumentException();
+
+        }
     }
 
     // GET filter
     @GetMapping("/filter={term}:{value}")
     public ProductData filterProducts(@PathVariable String term, @PathVariable String value) {
 
-        switch (term) {
-            case "id":
-                filteredProductsList.clear();
-                for (Product product : rawProductsList) {
-                    if (product.getId().equals(value)) {
-                        filteredProductsList.add(product);
+        if (term.equals("id") || term.equals("ean") || term.equals("title") || term.equals("brand")) {
+
+            switch (term) {
+                case "id":
+                    filteredProductsList.clear();
+                    for (Product product : rawProductsList) {
+                        if (product.getId().equals(value)) {
+                            filteredProductsList.add(product);
+                        }
                     }
-                }
-                break;
-            case "ean":
-                filteredProductsList.clear();
-                for (Product product : rawProductsList) {
-                    if (product.getEan().equals(value)) {
-                        filteredProductsList.add(product);
+                    break;
+                case "ean":
+                    filteredProductsList.clear();
+                    for (Product product : rawProductsList) {
+                        if (product.getEan().equals(value)) {
+                            filteredProductsList.add(product);
+                        }
                     }
-                }
-                break;
-            case "title":
-                filteredProductsList.clear();
-                for (Product product : rawProductsList) {
-                    if (product.getTitle().contains(value)) {
-                        filteredProductsList.add(product);
+                    break;
+                case "title":
+                    filteredProductsList.clear();
+                    for (Product product : rawProductsList) {
+                        if (product.getTitle().contains(value)) {
+                            filteredProductsList.add(product);
+                        }
                     }
-                }
-                break;
-            case "brand":
-                filteredProductsList.clear();
-                for (Product product : rawProductsList) {
-                    if (product.getBrand().contains(value)) {
-                        filteredProductsList.add(product);
+                    break;
+                case "brand":
+                    filteredProductsList.clear();
+                    for (Product product : rawProductsList) {
+                        if (product.getBrand().contains(value)) {
+                            filteredProductsList.add(product);
+                        }
                     }
-                }
-                break;
+                    break;
+            }
+
+            // Default sorting
+            filteredProductsList.sort(comparing(Product::getStock));
+            filteredProductsList.sort(comparing(Product::getPrice));
+            filteredProductsList.sort(comparing(Product::getStock).reversed());
+
+            return new ProductData(filteredProductsList);
+
+        } else {
+
+            throw new IllegalArgumentException();
+
         }
-
-        // Default sorting
-        filteredProductsList.sort(comparing(Product::getStock));
-        filteredProductsList.sort(comparing(Product::getPrice));
-        filteredProductsList.sort(comparing(Product::getStock).reversed());
-
-        return new ProductData(filteredProductsList);
     }
 
     // GET order_by
@@ -127,27 +145,42 @@ public class GroupingProductsController {
         sortedProductsList.clear();
         sortedProductsList.addAll(rawProductsList);
 
-        switch (criteria) {
-            case "stock":
+        if ((criteria.equals("stock") || criteria.equals("price")) && (direction.equals("asc") || direction.equals("desc"))) {
 
-                if (direction.equals("asc"))
-                    sortedProductsList.sort(comparing(Product::getStock));
+            switch (criteria) {
+                case "stock":
 
-                else if (direction.equals("desc"))
-                    sortedProductsList.sort(comparing(Product::getStock).reversed());
+                    if (direction.equals("asc"))
+                        sortedProductsList.sort(comparing(Product::getStock));
 
-                break;
-            case "price":
+                    else if (direction.equals("desc"))
+                        sortedProductsList.sort(comparing(Product::getStock).reversed());
 
-                if (direction.equals("asc"))
-                    sortedProductsList.sort(comparing(Product::getPrice));
+                    break;
+                case "price":
 
-                else if (direction.equals("desc"))
-                    sortedProductsList.sort(comparing(Product::getPrice).reversed());
+                    if (direction.equals("asc"))
+                        sortedProductsList.sort(comparing(Product::getPrice));
 
-                break;
+                    else if (direction.equals("desc"))
+                        sortedProductsList.sort(comparing(Product::getPrice).reversed());
+
+                    break;
+            }
+
+            return new ProductData(sortedProductsList);
+
+        } else {
+
+            throw new IllegalArgumentException();
+
         }
+    }
 
-        return new ProductData(sortedProductsList);
+    // Exception handler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Requested products not found in the available products list.")
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void badExceptionHandler() {
+        // Response sent.
     }
 }

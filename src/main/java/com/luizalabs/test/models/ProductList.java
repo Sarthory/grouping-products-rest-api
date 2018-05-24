@@ -95,9 +95,9 @@ public class ProductList {
 
             String brand = prod.getBrand();
 
-            if (!brands.contains(brand)) {
+            if (!brands.contains(brand))
                 newList.add(craftProductList(products, brand, "brand"));
-            }
+
             brands.add(brand);
         }
 
@@ -112,25 +112,28 @@ public class ProductList {
             case "ean": //EAN
                 newList.clear();
                 for (Product prod : list) {
-                    if (prod.getEan().equals(descriptionTerm)) {
+
+                    if (prod.getEan().equals(descriptionTerm))
                         newList.add(prod);
-                    }
+
                 }
                 break;
             case "title": // Title similarity
                 newList.clear();
                 for (Product prod : list) {
-                    if (prod.getTitle().contains(descriptionTerm)) {
+
+                    if (prod.getTitle().contains(descriptionTerm))
                         newList.add(prod);
-                    }
+
                 }
                 break;
             case "brand": // Brand
                 newList.clear();
                 for (Product prod : list) {
-                    if (prod.getBrand().equals(descriptionTerm)) {
+
+                    if (prod.getBrand().equals(descriptionTerm))
                         newList.add(prod);
-                    }
+
                 }
                 break;
         }
