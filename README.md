@@ -69,10 +69,10 @@ Para executar esta aplicação web em seu diretório local, é necessário possu
 > $ mvn spring-boot:run
 
 ## Executando o programa utilizando o arquivo .jar
-Está disponibilizado neste repositório no diretório /dist um arquivo .jar para execução standalone.
+Está disponibilizado neste repositório no diretório /standalone um arquivo .jar para execução standalone.
 Para executar esta aplicação web com o arquivo `GoupingProductsAPI.jar`:
 
-> $ cd grouping-products-rest-api/dist
+> $ cd grouping-products-rest-api/standalone
 
 > $ java -jar GoupingProductsAPI.jar
 

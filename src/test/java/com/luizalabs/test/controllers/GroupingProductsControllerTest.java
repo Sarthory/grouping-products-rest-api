@@ -9,9 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,21 +24,8 @@ public class GroupingProductsControllerTest {
     private MockMvc mockMvc;
 
     /**
-     * Test of createProductsList method, of class GroupingProductsController.
-     */
-    @Test
-    public void createProductsList() throws Exception {
-
-        String json = "[{'id':'123','ean':'123321','title':'teste1','brand':'marca1','price':123.50,'stock':50}]";
-
-        mockMvc.perform((RequestBuilder) post("/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(json))
-                .andExpect(status().isCreated());
-    }
-
-    /**
      * Test of getGroupedProductsList method, of class GroupingProductsController.
+     * @throws java.lang.Exception
      */
     @Test
     public void getGroupedProductsList() throws Exception {
@@ -52,6 +37,7 @@ public class GroupingProductsControllerTest {
 
     /**
      * Test of filterProducts method, of class GroupingProductsController.
+     * @throws java.lang.Exception
      */
     @Test
     public void filterProducts() throws Exception {
