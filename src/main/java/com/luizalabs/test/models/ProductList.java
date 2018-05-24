@@ -56,18 +56,30 @@ public class ProductList {
 
         List<ProductList> newList = new ArrayList<>();
         List<String> titles = new ArrayList<>();
+        List<String> descrTitle = new ArrayList<>();
+
         titles.clear();
 
         for (Product prod : products) {
 
             String productTitle = prod.getTitle(),
-                    arr[] = productTitle.split(" ", 4),
-                    stripTitle = arr[0] + " " + arr[1] + " " + arr[2];
+                    arr[] = productTitle.split(" ", 4);
+
+            if (arr.length > 2) {
+                descrTitle.add(arr[0] + " " + arr[1] + " " + arr[2]);
+            } else if (arr.length > 1) {
+                descrTitle.add(arr[0] + " " + arr[1]);
+            } else {
+                descrTitle.add(productTitle);
+            }
+
+            String stripTitle = String.join("", descrTitle);
 
             if (!titles.contains(stripTitle)) {
                 newList.add(craftProductList(products, stripTitle, "title"));
             }
             titles.add(stripTitle);
+            descrTitle.clear();
         }
 
         return newList;
