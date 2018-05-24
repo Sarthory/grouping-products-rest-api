@@ -30,7 +30,6 @@ public class GroupingProductsController {
     public void createProductsList(@RequestBody String inputList) {
 
         JSONArray parsedRawProductsList = new JSONArray(inputList);
-        rawProductsList.clear();
 
         // Convert JSON entry into Java Objects
         int i = 0;
